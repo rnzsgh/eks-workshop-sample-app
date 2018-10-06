@@ -1,0 +1,21 @@
+---
+version: 0.2
+phases:
+  install:
+    commands:
+      - apt-get -y install python-pip golang && pip install --upgrade python && pip install --upgrade awscli
+  pre_build:
+      commands:
+      - TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - $(aws ecr get-login --no-include-email)
+  build:
+    commands:
+      - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+      - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+      - docker build --tag $REPOSITORY_URI:$TAG .
+  post_build:
+    commands:
+      - docker push $REPOSITORY_URI:$TAG
+      - printf '[{"name":"${ServiceName}","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
+artifacts:
+  files: build.json
