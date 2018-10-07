@@ -15,7 +15,7 @@ phases:
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' hello-k8s.yml
         - $(aws ecr get-login --no-include-email)
         - export KUBECONFIG=$HOME/.kube/config
-        - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --verbose
+        - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
   build:
     commands:
       - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
