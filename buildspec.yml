@@ -6,7 +6,7 @@ phases:
       - curl -o aws-iam-authenticator  https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
       - curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
-      - apt-get update  && apt-get -y install python-pip golang && pip install --upgrade python && pip install --upgrade awscli
+      - apt-get update  && apt-get -y install golang python3-pip python3-dev && pip3 install --upgrade python && pip3 install --upgrade awscli
       - mkdir -p golang/bin && export GOPATH=$PWD/golang && export PATH=$PWD/golang/bin:$PATH
       - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   pre_build:
