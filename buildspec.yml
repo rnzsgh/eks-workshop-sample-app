@@ -13,12 +13,13 @@ phases:
       commands:
         - TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' hello-k8s.yml
-        - kubectl apply -f hello-k8s.yml
         - $(aws ecr get-login --no-include-email)
+        - export KUBECONFIG=$HOME/.kube/config
         - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
-        - cat ~/.kube/config
         - echo $HOME
-        - export KUBECONFIG=/root/.kube/config
+        - cat $HOME/.kube/config
+        - cat ~/.kube/config
+        - kubectl apply -f hello-k8s.yml
   build:
     commands:
       - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
