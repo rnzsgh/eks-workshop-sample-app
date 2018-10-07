@@ -28,7 +28,7 @@ func main() {
 			io.WriteString(w, strconv.Itoa(f())+"\n")
 		}
 
-		fmt.Println("Hello world called - the log message")
+		fmt.Println("Hello world - the log message")
 
 	})
 	http.ListenAndServe(":8080", nil)
