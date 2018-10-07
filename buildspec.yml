@@ -8,6 +8,7 @@ phases:
       - chmod +x ./kubectl ./aws-iam-authenticator
       - apt-get update  && apt-get -y install golang python3-pip python3-dev && pip install --upgrade python && pip install --upgrade awscli
       - python -V
+      - python3 -V
       - pip --version
       - pip3 --version
       - mkdir -p golang/bin && export GOPATH=$PWD/golang && export PATH=$PWD/golang/bin:$PATH
