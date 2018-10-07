@@ -16,17 +16,15 @@ phases:
         - $(aws ecr get-login --no-include-email)
         - export KUBECONFIG=$HOME/.kube/config
         - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --verbose
-        - echo $HOME
-        - cat $HOME/.kube/config
-        - cat ~/.kube/config
-        - kubectl apply -f hello-k8s.yml
   build:
     commands:
       - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
       - docker build --tag $REPOSITORY_URI:$TAG .
+
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$TAG
+      - kubectl apply -f hello-k8s.yml
       - printf '[{"name":"${ServiceName}","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
 artifacts:
   files: build.json
