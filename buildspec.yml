@@ -16,6 +16,9 @@ phases:
         - kubectl apply -f hello-k8s.yml
         - $(aws ecr get-login --no-include-email)
         - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+        - cat ~/.kube/config
+        - echo $HOME
+        - export KUBECONFIG=/root/.kube/config
   build:
     commands:
       - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
